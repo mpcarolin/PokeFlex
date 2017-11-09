@@ -28,7 +28,7 @@ were also provided by PokeAPI.
 We wanted to separate all this code onto a separate server. By doing this we
 can reuse our individual server for multiple applications that need the same
 cached, modified JSON data. This also helps with encapsulation: our application
-code can worry about application stuff and just query a single URI for all it's 
+code can worry about application stuff and just query a single URI for all its 
 needs.
 
 
