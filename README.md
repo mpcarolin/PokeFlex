@@ -6,9 +6,10 @@ JSON schema customization, and simplified server startup.
 # Setup and run
 First configure config.json with your parameters. Then execute:
 >`python setup.py install`
+>
 >`python api.py`
 
-PokeFlex will be available on localhost:5000.
+PokeFlex will be available on localhost:5000
 
 # Full story
 PokeFlex provides REST api endpoints to PokeAPI, running on an easy to
