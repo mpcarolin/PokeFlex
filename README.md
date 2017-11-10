@@ -1,16 +1,23 @@
 # TLDR 
 
-Pokedex Flex API is like your own PokeAPI, with auto-caching,
+PokeFlex is like your own PokeAPI, with auto-caching,
 JSON schema customization, and simplified server startup.
 
+# Setup and run
+First configure config.json with your parameters. Then execute:
+>`python setup.py install`
+>`python api.py`
+
+PokeFlex will be available on localhost:5000.
+
 # Full story
-Pokedex Flex API provides REST api endpoints to PokeAPI, running on an easy to
+PokeFlex provides REST api endpoints to PokeAPI, running on an easy to
 boot python server. Why, you may ask, would one want this when there is, you know, 
 POKE API? Here's why we needed it:
 
 ## Caching
 PokeAPI has a fair use policy that limits the requests you can
-make to an individual resource per day. Pokedex Flex Api uses PokeBase to cache 
+make to an individual resource per day. PokeFlex uses PokeBase to cache 
 API response data on disk to minimize the number of requests. We go one step
 further and ensure that the API is queried as often as you'd like it to stay
 in sync with PokeAPI. 
