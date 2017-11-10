@@ -3,7 +3,7 @@
 PokeFlex is like your own PokeAPI, with auto-caching,
 JSON schema customization, and simplified server startup.
 
-# Setup and run
+# Setup and Run
 First configure config.json with your parameters. Then execute:
 >`python setup.py install`
 >
@@ -11,7 +11,7 @@ First configure config.json with your parameters. Then execute:
 
 PokeFlex will be available on localhost:5000
 
-# Full story
+# Full Story
 PokeFlex provides REST api endpoints to PokeAPI, running on an easy to
 boot python server. Why, you may ask, would one want this when there is, you know, 
 POKE API? Here's why we needed it:
