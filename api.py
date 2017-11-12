@@ -9,27 +9,20 @@ class DefaultJsonMapper(object):
     def map(self, endpoint, json): return json
 
 class FlexApp(FlaskAPI):
-    def __init__(self):
+    def __init__(self, json_mapper = DefaultJsonMapper()):
         super(FlexApp, self).__init__(PROJECT_NAME)
-        self.json_mapper = DefaultJsonMapper()
+        self.json_mapper = json_mapper
+        set_passthroughs(self, json_mapper)
 
-app = FlexApp()
+    def map(self, endpoint, json):
+        return self.json_mapper.map(endpoint, json)
 
-class BaseApi(object):
-    '''
-    Passthrough routing methods for the PokeAPI endpoints.
-    Accepts an optional json_mapper object that can transform
-    json using the map method. See DefaultJsonMapper for the 
-    expected signature for map.
-    '''
-    def __init__(self, json_mapper=None):
-        self.app = app
-        if json_mapper is not None:
-            app.json_mapper = json_mapper
-    
-    def run(self, debug):
-        return self.app.run(debug=debug)
-
+'''
+Passthrough routing methods for the PokeAPI endpoints.
+Set the app's json_mapper to change the mapping behavior.
+See DefaultJsonMapper for the expected signature for map.
+'''
+def set_passthroughs(app, mapper):
     @app.route("/pokemon", methods=['GET'])
     def pokemon():
         json = {
@@ -37,6 +30,16 @@ class BaseApi(object):
             'color': 'Yellow',
             'type': 'Electric'
         }
-        return app.json_mapper.map("/pokemon", json)
+        return mapper.map("/pokemon", json)
+    
 
+    @app.route("/trainer", methods=['GET'])
+    def trainer():
+        json = {
+            'name': 'Red',
+            'color': '...well, red.',
+            'goal': 'catch all pokemon. AT ALL COSTS.'
+        }
+        return mapper.map('/trainer', json)
+     
 
