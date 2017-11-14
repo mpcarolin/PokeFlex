@@ -18,10 +18,11 @@ POKE API? Here's why we needed it:
 
 ## Caching
 PokeAPI has a fair use policy that limits the requests you can
-make to an individual resource per day. PokeFlex uses PokeBase to cache 
-API response data on disk to minimize the number of requests. We go one step
-further and ensure that the API is queried as often as you'd like it to stay
-in sync with PokeAPI. 
+make to an individual resource per day. PokeFlex caches http
+API response data on disk to minimize the number of requests
+you make to PokeAPI. We also provide the means for you to 
+specify how often you would like PokeFlex to ditch the cache
+and resynchronize with PokeAPI.
 
 ## Simple Schema Modification
 For our particular use, we needed to both modify and add to the JSON that
