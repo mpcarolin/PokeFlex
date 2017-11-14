@@ -6,6 +6,7 @@ import config
 import json
 import os
 
+# initialize the request caching
 cache.install_cache(
     cache_name = config.CACHE_NAME,
     backend = config.CACHE_DB,
@@ -64,17 +65,45 @@ ENDPOINTS = {
     "pokedex": "/pokedex"
 }
 
-class DefaultJsonMapper(object):
-    def map(self, endpoint, json): return json
+def get_uri(endpoint):
+    return BASE_URI + endpoint
+
+class JsonMapper(object):
+    '''
+    Base JsonMapper. Users should subclass JsonMapper and 
+    define a function for every endpoint for which
+    they want to map json. Do this using the @maps(endpoint)
+    decorator, or manually assigning functions to the funcs
+    property.
+    '''
+    def __init__(self):
+        self.funcs = {}
+        for key in ENDPOINTS.keys():
+            self.funcs[key] = None
+
+    def maps(endpoint):
+        '''
+        Decorator for assigning functions to endpoints. Usage:
+        @maps('/pokemon/')
+        def foo(json):
+            return ...
+        '''
+        def maps_decorator(func):
+            def func_wrapper(*args, **kwargs):
+                self.funcs[endpoint] = partial(func, endpoint)
+                return func(*args, **kwargs)
+            return func_wrapper
+        return maps_decorator
+
+    def map(self, endpoint, json): 
+        if self.funcs[endpoint] is not None:
+            self.funcs[endpoint](json)
 
 class FlexApp(FlaskAPI):
-    def __init__(self, json_mapper = DefaultJsonMapper()):
+    def __init__(self, json_mapper = JsonMapper()):
         super(FlexApp, self).__init__(config.PROJECT_NAME)
         self.json_mapper = json_mapper
         set_passthroughs(self, json_mapper)
-
-    def map(self, endpoint, json):
-        return self.json_mapper.map(endpoint, json)
 
 def set_passthroughs(app, mapper):
     '''
@@ -83,12 +112,11 @@ def set_passthroughs(app, mapper):
     See DefaultJsonMapper for the expected signature for map.
     '''
     def template_func(endpoint):
-        full_uri = BASE_URI + endpoint
         json = {
             'name': 'Pikachu',
             'color': 'Yellow',
             'type': 'Electric',
-            'endpoint': full_uri
+            'endpoint': get_uri(endpoint)
         }
         return mapper.map(endpoint, json)
 
