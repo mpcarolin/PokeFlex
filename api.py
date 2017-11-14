@@ -1,9 +1,7 @@
+from config import PROJECT_NAME
 from flask_api import FlaskAPI
 import json
-
-with open('config.json', 'r') as config:
-    json = json.loads(config.read())
-    PROJECT_NAME = json['project_name'] or __name__
+import os
 
 class DefaultJsonMapper(object):
     def map(self, endpoint, json): return json
@@ -17,12 +15,15 @@ class FlexApp(FlaskAPI):
     def map(self, endpoint, json):
         return self.json_mapper.map(endpoint, json)
 
-'''
-Passthrough routing methods for the PokeAPI endpoints.
-Set the app's json_mapper to change the mapping behavior.
-See DefaultJsonMapper for the expected signature for map.
-'''
 def set_passthroughs(app, mapper):
+    '''
+    Passthrough routing methods for the PokeAPI endpoints.
+    Set the app's json_mapper to change the mapping behavior.
+    See DefaultJsonMapper for the expected signature for map.
+
+    TODO: determine if these functions can be auto-generated.
+    '''
+
     @app.route("/pokemon", methods=['GET'])
     def pokemon():
         json = {
