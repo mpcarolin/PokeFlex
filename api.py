@@ -4,7 +4,10 @@ import requests_cache as cache
 import requests
 import config
 import json
+import pdb
 import os
+
+dbreak = pdb.set_trace
 
 # initialize the request caching
 cache.install_cache(
@@ -96,8 +99,15 @@ class JsonMapper(object):
         return maps_decorator
 
     def map(self, endpoint, json): 
-        if self.funcs[endpoint] is not None:
-            self.funcs[endpoint](json)
+        '''
+        Calls the function assigned for mapping the endpoint.
+        If no function is assigned, the unmodified json is returned.
+        '''
+        if endpoint in self.funcs and self.funcs[endpoint] is not None: 
+            return self.funcs[endpoint](json)
+        else:
+            return json 
+
 
 class FlexApp(FlaskAPI):
     def __init__(self, json_mapper = JsonMapper()):
