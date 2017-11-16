@@ -3,31 +3,27 @@ from constants import ENDPOINTS
 
 class JsonMapper(object):
     '''
-    Base JsonMapper. Users should subclass JsonMapper and 
-    define a function for every endpoint for which
-    they want to map json. Do this using the @maps(endpoint)
-    decorator, or manually assigning functions to the funcs
-    property. Child initializers must call super init.
+    JsonMapper object. Users should import an instance of this class,
+    then define the mapping functions using the maps decorator.
     '''
     def __init__(self):
         self.funcs = {}
-        for key in ENDPOINTS.keys():
-            self.funcs[key] = None
+        for endpoint in ENDPOINTS.keys():
+            self.funcs[endpoint] = lambda json: json
 
-    def maps(self, endpoint):
+    def maps(self, *endpoints):
         '''
         Decorator for assigning functions to endpoints. 
         Usage:
             @maps('/pokemon/')
-            def foo(json):
-                return ...
+            def foo(json): return modify(json) ...
         '''
         def maps_decorator(func):
-            self.funcs[endpoint] = partial(func, endpoint)
+            for endpoint in endpoints:
+                self.funcs[endpoint] = partial(func, endpoint)
             def func_wrapper(*args, **kwargs):
                 return func(*args, **kwargs)
             return func_wrapper
-
         return maps_decorator
 
     def map(self, endpoint, json): 
@@ -35,8 +31,8 @@ class JsonMapper(object):
         Calls the function assigned for mapping the endpoint.
         If no function is assigned, the unmodified json is returned.
         '''
-        if endpoint in self.funcs and self.funcs[endpoint] is not None: 
+        if endpoint in self.funcs:
             return self.funcs[endpoint](json)
         else:
-            return json 
+            return json
 

@@ -1,27 +1,23 @@
 from flask_api import FlaskAPI
 from functools import partial
 from mapping import JsonMapper
+from constants import PROJECT_NAME, BASE_URI, ENDPOINTS
+from constants import CACHE_NAME, CACHE_DB, SYNC_INTERVAL
 import requests_cache as cache
 import requests
-import config
 import json
 import os
 
-from constants import BASE_URI, ENDPOINTS
-
 # initialize the request caching
 cache.install_cache(
-    cache_name = config.CACHE_NAME,
-    backend = config.CACHE_DB,
-    expire_after = config.SYNC_INTERVAL
+    cache_name = CACHE_NAME,
+    backend = CACHE_DB,
+    expire_after = SYNC_INTERVAL
 )
-
-def get_uri(endpoint):
-    return BASE_URI + endpoint
 
 class FlexApp(FlaskAPI):
     def __init__(self, json_mapper = JsonMapper()):
-        super(FlexApp, self).__init__(config.PROJECT_NAME)
+        super(FlexApp, self).__init__(PROJECT_NAME)
         self.json_mapper = json_mapper
         set_passthroughs(self, json_mapper)
 
@@ -45,3 +41,5 @@ def set_passthroughs(app, mapper):
         f.__name__ = name
         app.add_url_rule(endpoint, view_func=f)
 
+def get_uri(endpoint):
+    return BASE_URI + endpoint
