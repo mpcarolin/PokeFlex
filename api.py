@@ -24,22 +24,34 @@ class FlexApp(FlaskAPI):
 def set_passthroughs(app, mapper):
     '''
     Passthrough routing methods for the PokeAPI endpoints.
-    Set the app's json_mapper to change the mapping behavior.
-    See DefaultJsonMapper for the expected signature for map.
+    All make GET requests and pass json to the defined mapper.
+    Import an instance of JsonMapper and define json mappings
+    using the @maps(...) decorator to determine how json is 
+    transformed.
     '''
-    def template_func(endpoint):
-        json = {
-            'name': 'Pikachu',
-            'color': 'Yellow',
-            'type': 'Electric',
-            'endpoint': get_uri(endpoint)
-        }
-        return mapper.map(endpoint, json)
+    def template_func(endpoint, param=None, params=None, **kwargs):
+        full_uri = make_uri(endpoint, param)
+        response = requests.get(full_uri, params, **kwargs)
+        poke_json = response.json()
+        return mapper.map(endpoint, poke_json)
 
     for name, endpoint in ENDPOINTS.items():
         f = partial(template_func, endpoint)
         f.__name__ = name
         app.add_url_rule(endpoint, view_func=f)
 
-def get_uri(endpoint):
-    return BASE_URI + endpoint
+def make_uri(endpoint, param=None):
+    uri = BASE_URI + endpoint
+    return add_param(uri, param)
+
+def add_param(endpoint, param=None):
+    if param is None or not requires_param(endpoint): 
+        return endpoint
+
+    start = endpoint.index('<')
+    end = endpoint.index('>')
+    return endpoint[:start] + str(param) + endpoint[end+1:]
+
+def requires_param(endpoint):
+    return ('<' in endpoint and '>' in endpoint)
+
