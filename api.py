@@ -29,14 +29,19 @@ def set_passthroughs(app, mapper):
     using the @maps(...) decorator to determine how json is 
     transformed.
     '''
-    def template_func(endpoint, param=None, params=None, **kwargs):
+    def route(endpoint, param=None, params=None, **kwargs):
+        '''
+        Core passthrough function. Routes the endpoint by
+        making a request to the full PokeAPI endpoint, then
+        returns JSON transformed by the mapper.
+        '''
         full_uri = make_uri(endpoint, param)
         response = requests.get(full_uri, params, **kwargs)
         poke_json = response.json()
         return mapper.map(endpoint, poke_json)
 
     for name, endpoint in ENDPOINTS.items():
-        f = partial(template_func, endpoint)
+        f = partial(route, endpoint)
         f.__name__ = name
         app.add_url_rule(endpoint, view_func=f)
 
