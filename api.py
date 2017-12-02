@@ -40,10 +40,12 @@ def set_passthroughs(app, mapper):
         poke_json = response.json()
         return mapper.map(endpoint, poke_json)
 
-    for name, endpoint in ENDPOINTS.items():
-        f = partial(route, endpoint)
-        f.__name__ = name
-        app.add_url_rule(endpoint, view_func=f)
+    for method in ENDPOINTS:
+        uri_list = ENDPOINTS[method].items()
+        for name, endpoint in uri_list:
+            f = partial(route, endpoint)
+            f.__name__ = name
+            app.add_url_rule(endpoint, view_func=f)
 
 def make_uri(endpoint, param=None):
     uri = BASE_URI + endpoint
