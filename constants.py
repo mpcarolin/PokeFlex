@@ -23,6 +23,7 @@ ENDPOINTS = {
     "all-pokemon": "/pokemon",
     "pokemon-by-id": "/pokemon/<int:param>",
     "pokemon-by-name": "/pokemon/<string:param>",
+	"pokemon-forms": "/pokemon-form/<int:param>",
     "move-damage-class": "/move-damage-class",
     "ability": "/ability",
     "pal-park-area": "/pal-park-area",
