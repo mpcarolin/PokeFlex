@@ -14,18 +14,23 @@ CACHE_NAME = PROJECT_NAME + '_cache'
 
 BASE_URI = 'https://pokeapi.co/api/v2'
 ENDPOINTS = {
+	#Used endpoints
+	"pokemon-by-id": "/pokemon/<int:param>",
+    "pokemon-by-name": "/pokemon/<string:param>",
+	"move-by-name": "/move/<string:param>",
+    "ability-by-name": "/ability/<string:param>",
+    "item-by-name": "/item/<string:param>",
+
+	#Unused endpoints
     "evolution-chain": "/evolution-chain",
     "move-battle-style": "/move-battle-style",
     "generation": "/generation",
     "evolution-trigger": "/evolution-trigger",
-    "move": "/move",
     "encounter-condition-value": "/encounter-condition-value",
     "all-pokemon": "/pokemon",
-    "pokemon-by-id": "/pokemon/<int:param>",
-    "pokemon-by-name": "/pokemon/<string:param>",
 	"pokemon-forms": "/pokemon-form/<int:param>",
     "move-damage-class": "/move-damage-class",
-    "ability": "/ability",
+
     "pal-park-area": "/pal-park-area",
     "contest-effect": "/contest-effect",
     "machine": "/machine",
@@ -56,7 +61,6 @@ ENDPOINTS = {
     "gender": "/gender",
     "region": "/region",
     "growth-rate": "/growth-rate",
-    "item": "/item",
     "version-group": "/version-group",
     "berry": "/berry",
     "characteristic": "/characteristic",
