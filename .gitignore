@@ -3,6 +3,7 @@ cache/
 *.sqlite
 *.mysql
 PokeFlex_cache.sqlite
+endpoints.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
