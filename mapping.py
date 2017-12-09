@@ -1,15 +1,16 @@
 from functools import partial
 from constants import ENDPOINTS
 
-class JsonMapper(object):
+class ResponseMapper(object):
     '''
     JsonMapper object. Users should import an instance of this class,
     then define the mapping functions using the maps decorator.
     '''
     def __init__(self):
         self.funcs = {}
-        for endpoint in ENDPOINTS.keys():
-            self.funcs[endpoint] = lambda json: json
+        for api in ENDPOINTS.keys():
+            for name, endpoint in ENDPOINTS[api]["endpoints"].items():
+                self.funcs[endpoint] = lambda response: response.json()
 
     def maps(self, *endpoints):
         '''
@@ -26,13 +27,13 @@ class JsonMapper(object):
             return func_wrapper
         return maps_decorator
 
-    def map(self, endpoint, json): 
+    def map(self, endpoint, response): 
         '''
         Calls the function assigned for mapping the endpoint.
         If no function is assigned, the unmodified json is returned.
         '''
         if endpoint in self.funcs:
-            return self.funcs[endpoint](json)
+            return self.funcs[endpoint](response)
         else:
-            return json
+            return response.json()
 
