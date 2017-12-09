@@ -20,6 +20,7 @@ ENDPOINTS = {
 	"move-by-name": "/move/<string:param>",
     "ability-by-name": "/ability/<string:param>",
     "item-by-name": "/item/<string:param>",
+    "set": "/set/<string:pokemon>/<string:meta>/<int:gen>",
 
 	#Unused endpoints
     "evolution-chain": "/evolution-chain",

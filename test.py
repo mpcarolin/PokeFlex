@@ -7,8 +7,7 @@ import mysql.connector
 mapper = JsonMapper()
 sql_util = PokedexMySQLUtil()
 
-@mapper.maps(ENDPOINTS['pokemon-by-id'])
-@mapper.maps(ENDPOINTS['pokemon-by-name'])
+@mapper.maps(ENDPOINTS['pokemon-by-name'], ENDPOINTS['pokemon-by-id'])
 def pokemon_mapper(self, json):
     pid = _sql_format(json['name'])
     sql_json = sql_util.get_pokemon(pid)
@@ -25,6 +24,16 @@ def move_mapper(self, json):
     aid = _sql_format(json['name'])
     sql_json = sql_util.get_ability(aid)
     return _combine_dicts(json, sql_json)
+
+@mapper.maps(ENDPOINTS['item-by-name'])
+def item_mapper(self, json):
+    iid = _sql_format(json['name'])
+    sql_json = sql_util.get_item(iid)
+    return _combine_dicts(json, sql_json)
+
+@mapper.maps(ENDPOINTS['set'])
+def set_mapper(self, json):
+    return sql_util.get_set('genger','ou', 6)
 
 def _sql_format(pokemon_name):
     '''
