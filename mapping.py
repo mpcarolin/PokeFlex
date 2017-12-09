@@ -8,8 +8,9 @@ class ResponseMapper(object):
     '''
     def __init__(self):
         self.funcs = {}
-        for endpoint in ENDPOINTS.keys():
-            self.funcs[endpoint] = lambda response: response.json()
+        for api in ENDPOINTS.keys():
+            for name, endpoint in ENDPOINTS[api]["endpoints"].items():
+                self.funcs[endpoint] = lambda response: response.json()
 
     def maps(self, *endpoints):
         '''

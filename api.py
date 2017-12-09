@@ -30,8 +30,11 @@ class ResponseWrapper(object):
         self.params = params or []
         self.kwargs = kwargs
 
-    def json(self, **kwargs):
-        return self.response.json(**kwargs)
+    def json(self):
+        try:
+            return self.response.json()
+        except Exception as e: #TODO: make more sepecific
+            return {}
 
     @property
     def status_code(self):
@@ -103,18 +106,16 @@ def set_passthroughs(app, mapper):
     # TODO: add more methods
     for method in ['GET']: 
         request_handler = request_handlers[method]
-        api_list = ENDPOINTS.items()
+        api_list = ENDPOINTS.keys()
         for api in api_list:
-            base_uri = api["base_uri"]
-            uri_list = api["endpoints"]
+            base_uri = ENDPOINTS[api]["base_uri"]
+            uri_list = ENDPOINTS[api]["endpoints"].items()
             for name, endpoint in uri_list:
                 f = partial(request_handler, base_uri + endpoint)
                 f.__name__ = name
                 app.add_url_rule(endpoint, view_func=f)
 
-def make_uri(endpoint, params=[]):
-    uri = BASE_URI + endpoint
-
+def make_uri(uri, params=[]):
     return add_param(uri, params[0])
     '''
     if not params or len(params) <= 0:
