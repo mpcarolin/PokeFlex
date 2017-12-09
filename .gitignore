@@ -2,6 +2,7 @@
 cache/
 *.sqlite
 *.mysql
+config.ini
 PokeFlex_cache.sqlite
 endpoints.json
 
@@ -106,3 +107,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+

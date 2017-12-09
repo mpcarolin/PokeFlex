@@ -1,7 +1,7 @@
 from flask_api import FlaskAPI
 from functools import partial, reduce
 from mapping import ResponseMapper
-from constants import PROJECT_NAME, BASE_URI, ENDPOINTS
+from constants import PROJECT_NAME, ENDPOINTS
 from constants import CACHE_NAME, CACHE_DB, SYNC_INTERVAL
 import requests_cache as cache
 import requests
@@ -103,11 +103,14 @@ def set_passthroughs(app, mapper):
     # TODO: add more methods
     for method in ['GET']: 
         request_handler = request_handlers[method]
-        uri_list = ENDPOINTS.items()
-        for name, endpoint in uri_list:
-            f = partial(request_handler, endpoint)
-            f.__name__ = name
-            app.add_url_rule(endpoint, view_func=f)
+        api_list = ENDPOINTS.items()
+        for api in api_list:
+            base_uri = api["base_uri"]
+            uri_list = api["endpoints"]
+            for name, endpoint in uri_list:
+                f = partial(request_handler, base_uri + endpoint)
+                f.__name__ = name
+                app.add_url_rule(endpoint, view_func=f)
 
 def make_uri(endpoint, params=[]):
     uri = BASE_URI + endpoint
