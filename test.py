@@ -39,10 +39,10 @@ def item_mapper(self, response):
     sql_json = sql_util.get_item(iid)
     return _combine_dicts(json, sql_json)
 
-@mapper.maps(uri('set'))
+@mapper.maps(uri('set2'))
 def set_mapper(self, response):
     json = response.json()
-    return sql_util.get_set('genger','ou', 6)
+    return sql_util.get_set('gengar','ou', 6)
 
 def _sql_format(pokemon_name):
     '''

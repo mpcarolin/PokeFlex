@@ -121,7 +121,6 @@ class PokedexMySQLUtil(object):
         return result_json
     
     def get_set(self, pid, meta, gen):
-        import pdb; pdb.set_trace()
         result_json = {}
         queries = [
             ("SELECT * FROM Trick WHERE pid = '%s'"
