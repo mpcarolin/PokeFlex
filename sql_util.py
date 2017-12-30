@@ -110,7 +110,7 @@ class PokedexMySQLUtil(object):
     
     def get_item(self, iid):
         result_json = {}
-        query = "SELECT * FROM item WHERE iid='%s-i'" % iid
+        query = "SELECT * FROM Item WHERE iid='%s-i'" % iid
         self.cursor.execute(query)
         sql_json = self.cursor.next()
         result_json['ldesc'] = sql_json['ldesc']
