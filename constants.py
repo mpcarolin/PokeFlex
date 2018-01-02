@@ -14,5 +14,5 @@ CACHE_DB = config.get('USER', 'cache_db')
 CACHE_NAME = PROJECT_NAME + '_cache'
 
 with open('./endpoints.json', 'r') as f:
-    ENDPOINTS = json.loads(f.read())
+    APIS = json.loads(f.read())
 

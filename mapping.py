@@ -1,5 +1,5 @@
 from functools import partial
-from constants import ENDPOINTS
+from constants import APIS
 
 class ResponseMapper(object):
     '''
@@ -8,8 +8,8 @@ class ResponseMapper(object):
     '''
     def __init__(self):
         self.funcs = {}
-        for api in ENDPOINTS.keys():
-            for name, endpoint in ENDPOINTS[api]["endpoints"].items():
+        for api in APIS.keys():
+            for name, endpoint in APIS[api]["endpoints"].items():
                 self.funcs[endpoint] = lambda response: response.json()
 
     def maps(self, *endpoints):

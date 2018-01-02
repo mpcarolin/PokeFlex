@@ -2,6 +2,7 @@
 cache/
 *.sqlite
 *.mysql
+.sublime-workspace
 config.ini
 PokeFlex_cache.sqlite
 endpoints.json
