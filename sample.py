@@ -9,8 +9,14 @@ def uri(key): return BASE_URI + ENDPOINTS[key]
 mapper = ResponseMapper()
 
 @mapper.maps(uri('test'))
-def test_mapping(self, response):
-    json = response.json()
+def test_mapping(self, exchange):
+    json = exchange.response.json()
     json['new key'] = 'new value'
+    return json
+
+@mapper.maps(uri('pokemon-by-id'))
+def pokemon(self, exchange):
+    json = exchange.response.json()
+    json['new_key'] = 'new value'
     return json
 
