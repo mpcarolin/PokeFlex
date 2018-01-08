@@ -94,7 +94,6 @@ def set_passthroughs(app, mapper):
         flask requeset class), obtains the response, then maps it using the 
         mapper object passed to set_passthroughs
         '''
-        dbreak()
         full_uri = make_uri(endpoint, params)
         api_request_handler = request_handlers[request.method]
         response = api_request_handler(full_uri, request)
