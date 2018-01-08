@@ -78,11 +78,15 @@ def set_passthroughs(app, mapper):
                 return requests.get(endpoint, params=args)
             elif http_method == 'POST':
                 return requests.post(endpoint, data=args, json=json)
+            elif http_method == 'PUT':
+                return requests.put(endpoint, data=json)
+            elif http_method == 'DELETE':
+                return requests.delete(endpoint)
 
         return adapted_handler
         
 
-    request_handlers = { method: make_handler(method) for method in ['GET', 'POST'] }
+    request_handlers = { method: make_handler(method) for method in ['GET', 'POST', 'PUT', 'DELETE'] }
 
     def dispatch(endpoint, **params):
         '''
@@ -90,6 +94,7 @@ def set_passthroughs(app, mapper):
         flask requeset class), obtains the response, then maps it using the 
         mapper object passed to set_passthroughs
         '''
+        dbreak()
         full_uri = make_uri(endpoint, params)
         api_request_handler = request_handlers[request.method]
         response = api_request_handler(full_uri, request)

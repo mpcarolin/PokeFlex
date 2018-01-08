@@ -1,5 +1,5 @@
 from api import FlexApp
-from sample import mapper
+from test import mapper
 
 app = FlexApp(mapper)
 
