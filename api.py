@@ -43,7 +43,7 @@ class HTTPExchange(object):
     def json(self):
         try:
             return self.response.json()
-        except Exception as e: #TODO: make more sepecific
+        except Exception as e: #TODO: make more specific
             return {}
 
     @property
@@ -91,7 +91,7 @@ def set_passthroughs(app, mapper):
     def dispatch(endpoint, **params):
         '''
         Executes the request handler for the current request (as supplied by the
-        flask requeset class), obtains the response, then maps it using the 
+        flask request class), obtains the response, then maps it using the 
         mapper object passed to set_passthroughs
         '''
         full_uri = make_uri(endpoint, params)

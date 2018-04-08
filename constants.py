@@ -15,4 +15,3 @@ CACHE_NAME = PROJECT_NAME + '_cache'
 
 with open('./endpoints.json', 'r') as f:
     APIS = json.loads(f.read())
-
