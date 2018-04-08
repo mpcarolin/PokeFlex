@@ -86,6 +86,7 @@ class PokedexMySQLUtil(object):
         #Optional fields
         result_json['z_power'] = sql_json['z_power']
         result_json['z_effect'] = self._get_z_effect_desc(sql_json['z_effect'])
+        result_json['z_boost'] = sql_json['z_boost']
         result_json['crystal'] = sql_json['crystal']
         
         self.cursor.execute(queries[1])
@@ -170,4 +171,5 @@ class PokedexMySQLUtil(object):
     def _get_z_effect_desc(self, flag):
         if flag in z_effect_desc:
             return z_effect_desc[flag]
-        return None
+
+        return flag
