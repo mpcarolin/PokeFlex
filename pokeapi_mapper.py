@@ -23,36 +23,37 @@ DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'
 
 @mapper.maps(uri('pokemon-by-name'), uri('pokemon-by-id'))
 def pokemon_mapper(self, exchange):
-    json = exchange.json()
-    pid = _sql_format(json['name'])
+    req_params = exchange.params
+    pid = _sql_format(req_params['pokemon'])
     sql_json = sql_util.get_pokemon(pid)
-    return _combine_dicts(json, sql_json)
+    return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('move-by-name'))
 def move_mapper(self, exchange):
-    json = exchange.json()
-    mid = _sql_format(json['name'])
+    req_params = exchange.params
+    mid = _sql_format(req_params['move_name'])
     sql_json = sql_util.get_move(mid)
-    return _combine_dicts(json, sql_json)
+    return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('ability-by-name'))
 def ability_mapper(self, exchange):
-    json = exchange.json()
-    aid = _sql_format(json['name'])
+    req_params = exchange.params
+    aid = _sql_format(req_params['abil_name'])
     sql_json = sql_util.get_ability(aid)
-    return _combine_dicts(json, sql_json)
+    return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('item-by-name'))
 def item_mapper(self, exchange):
-    json = exchange.json()
-    iid = _sql_format(json['name'])
+    req_params = exchange.params
+    iid = _sql_format(req_params['item_name'])
     sql_json = sql_util.get_item(iid)
-    return _combine_dicts(json, sql_json)
+    return _combine_dicts(exchange.json(), sql_json)
 
-@mapper.maps(uri('set2'))
+@mapper.maps(uri('set'))
 def set_mapper(self, exchange):
-    json = exchange.json()
-    return sql_util.get_set('gengar','ou', 6)
+    req_params = exchange.params
+    pid = _sql_format(req_params['pokemon'])
+    return sql_util.get_set(pid,req_params['meta'], req_params['gen'])
 
 @mapper.maps(DEFAULT_ENDPOINTS)
 def default_mapper(self, exchange):

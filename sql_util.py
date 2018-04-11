@@ -127,7 +127,7 @@ class PokedexMySQLUtil(object):
             ("SELECT * FROM Trick WHERE pid = '%s'"
                     " AND tier_id = '%s'"
                     " AND gen = %d" % (pid, meta, gen)),
-            "SELECT specie FROM pokemon WHERE pid='%s'" % pid
+            "SELECT specie FROM Pokemon WHERE pid='%s'" % pid
         ]
         
         #compile sets
