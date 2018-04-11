@@ -1,13 +1,16 @@
 from mapping import ResponseMapper
-from constants import ENDPOINTS as API
+from constants import APIS
 from sql_util import PokedexMySQLUtil
 
 sql_util = PokedexMySQLUtil()
 mapper = ResponseMapper()
 
-BASE_URI = API["pokeapi"]["base_uri"]
-ENDPOINTS = API["pokeapi"]["endpoints"]
+API = APIS["pokeapi"]
+BASE_URI = API["base_uri"]
+ENDPOINTS = API["endpoints"]
+
 def uri(key): return BASE_URI + ENDPOINTS[key]
+
 DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'), uri('location'), 
                 uri('location-area'), uri('encounter-method'), uri('encounter-condition'), 
                 uri('encounter-condition-value'), uri('pokemon-habitat'), uri('pokemon-form'),
@@ -19,45 +22,45 @@ DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'
                 uri('type'), uri('region'), uri('super-contest-effect'), uri('nature'))
 
 @mapper.maps(uri('pokemon-by-name'), uri('pokemon-by-id'))
-def pokemon_mapper(self, response):
-    json = response.json()
+def pokemon_mapper(self, exchange):
+    json = exchange.json()
     pid = _sql_format(json['name'])
     sql_json = sql_util.get_pokemon(pid)
     return _combine_dicts(json, sql_json)
 
 @mapper.maps(uri('move-by-name'))
-def move_mapper(self, response):
-    json = response.json()
+def move_mapper(self, exchange):
+    json = exchange.json()
     mid = _sql_format(json['name'])
     sql_json = sql_util.get_move(mid)
     return _combine_dicts(json, sql_json)
 
 @mapper.maps(uri('ability-by-name'))
-def ability_mapper(self, response):
-    json = response.json()
+def ability_mapper(self, exchange):
+    json = exchange.json()
     aid = _sql_format(json['name'])
     sql_json = sql_util.get_ability(aid)
     return _combine_dicts(json, sql_json)
 
 @mapper.maps(uri('item-by-name'))
-def item_mapper(self, response):
-    json = response.json()
+def item_mapper(self, exchange):
+    json = exchange.json()
     iid = _sql_format(json['name'])
     sql_json = sql_util.get_item(iid)
     return _combine_dicts(json, sql_json)
 
 @mapper.maps(uri('set2'))
-def set_mapper(self, response):
-    json = response.json()
+def set_mapper(self, exchange):
+    json = exchange.json()
     return sql_util.get_set('gengar','ou', 6)
 
 @mapper.maps(DEFAULT_ENDPOINTS)
-def default_mapper(self, response):
+def default_mapper(self, exchange):
     '''
     A method for all endpoints that don't need data from
     the MySQL database
     '''
-    return response.json()
+    return exchange.json()
 
 def _sql_format(pokemon_name):
     '''

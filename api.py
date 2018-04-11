@@ -1,4 +1,5 @@
 from flask_api import FlaskAPI
+from flask import request
 from functools import partial, reduce
 from mapping import ResponseMapper
 from constants import PROJECT_NAME, APIS
@@ -9,6 +10,7 @@ import json
 import pdb
 import os
 import re
+
 dbreak = pdb.set_trace
 
 # initialize the request caching
@@ -27,21 +29,26 @@ class FlexApp(FlaskAPI):
         self.json_mapper = json_mapper
         set_passthroughs(self, json_mapper)
 
-class ResponseWrapper(object):
+class HTTPExchange(object):
     '''
-    A response object passed to the mapping methods. 
-    Contains the api response object and the parameters
-    from the request (if any)
+    A wrapper around the flask request and response objects that constitute
+    the http exchange for a given endpoint. This is passed to the mapping 
+    methods. Only accepts the response object since it contains the request
+    object.
     '''
-    def __init__(self, response, params):
+    def __init__(self, response, params={}):
         self.response = response
-        self.params = params or {}
+        self.params = params
 
     def json(self):
         try:
             return self.response.json()
-        except Exception as e: #TODO: make more sepecific
+        except Exception as e: #TODO: make more specific
             return {}
+
+    @property
+    def request(self):
+        return self.response.request
 
     @property
     def status_code(self):
@@ -63,67 +70,62 @@ def set_passthroughs(app, mapper):
     json mappings using the @maps(...) decorator to specify 
     a json transformation.
     '''
-    def get(endpoint, **params):
+    def make_handler(http_method):
+        def adapted_handler(endpoint, flask_request): 
+            args = flask_request.args
+            json = flask_request.data
+            if http_method == 'GET':
+                return requests.get(endpoint, params=args)
+            elif http_method == 'POST':
+                return requests.post(endpoint, data=args, json=json)
+            elif http_method == 'PUT':
+                return requests.put(endpoint, data=json)
+            elif http_method == 'DELETE':
+                return requests.delete(endpoint)
+
+        return adapted_handler
+        
+
+    request_handlers = { method: make_handler(method) for method in ['GET', 'POST', 'PUT', 'DELETE'] }
+
+    def dispatch(endpoint, **params):
         '''
-        Makes a GET request to endpoint, using specified
-        params. Returns the json as mapped by the 
-        mapping function assigned for that endpoint.
+        Executes the request handler for the current request (as supplied by the
+        flask request class), obtains the response, then maps it using the 
+        mapper object passed to set_passthroughs
         '''
         full_uri = make_uri(endpoint, params)
-        response = requests.get(full_uri)
-        wrapped_response = ResponseWrapper(response, params=kwargs)
-        return mapper.map(endpoint, wrapped_response)
-    
-    def post(url, data, json, **kwargs):
-        raise NotImplementedError
+        api_request_handler = request_handlers[request.method]
+        response = api_request_handler(full_uri, request)
+        exchange = HTTPExchange(response, params=params)
 
-    def put():
-        raise NotImplementedError
+        return mapper.map(endpoint, exchange)
 
-    def head():
-        raise NotImplementedError
+    def assign_routing_rules_for_api(api_data):
+        '''
+        @param api_data: A dictionary with two key-value pairs:
+                - base_uri:  The base uri that prefixes all endpoints
+                - endpoints: A dictionary of endpoint names to endpoints. 
+                             Any parameters specified using flask syntax
+        '''
+        base_uri = api_data["base_uri"]
+        uri_list = api_data["endpoints"].items()
+        for name, endpoint in uri_list:
+            full_uri = base_uri + endpoint
+            f = partial(dispatch, full_uri)
+            f.__name__ = name
+            app.add_url_rule(endpoint, view_func=f, methods=request_handlers.keys())
 
-    def trace():
-        raise NotImplementedError
-    
-    def options():
-        raise NotImplementedError
+    for api_info in APIS.values():
+        assign_routing_rules_for_api(api_info)
 
-    def delete():
-        raise NotImplementedError
-
-    def connect():
-        raise NotImplementedError
-
-    def patch():
-        raise NotImplementedError
-
-    request_handlers = {
-        'GET': get,
-        'POST': post,
-        'PUT': put,
-        'HEAD': head,
-        'TRACE': trace,
-        'OPTIONS': options,
-        'DELETE': delete,
-        'CONNECT': connect,
-        'PATCH': patch
-    }
-
-    # TODO: add more methods
-    for method in ['GET']: 
-        request_handler = request_handlers[method]
-        api_list = APIS.keys()
-        for api in api_list:
-            base_uri = APIS[api]["base_uri"]
-            uri_list = APIS[api]["endpoints"].items()
-            for name, endpoint in uri_list:
-                full_uri = base_uri + endpoint
-                f = partial(request_handler, full_uri)
-                f.__name__ = name
-                app.add_url_rule(endpoint, view_func=f)
 
 def make_uri(uri, params):
+    '''
+    Replaces parameters in the uri with parameters in the
+    params dict. The uri endpoint should specify parameters
+    using the flask syntax <type:name>, such as <string:color>
+    '''
     for name, value in params.items():
         pattern = '<.*:name>'.replace('name', name)
         uri = re.sub(pattern, str(value), uri, count=1)
