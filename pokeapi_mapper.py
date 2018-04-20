@@ -21,6 +21,17 @@ DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'
                 uri('item-pocket'), uri('machine'), uri('berry'), uri('berry-firmness'), uri('berry-flavor'),
                 uri('type'), uri('region'), uri('super-contest-effect'), uri('nature'))
 
+@mapper.maps(uri('encounter'))
+def encounter_mapper(self, exchange):
+    return_json = {}
+    encounter_data = []
+    for json_obj in exchange.json():
+        encounter_data.append(json_obj)
+
+    return_json['encounter_potential'] = encounter_data
+    return return_json
+
+
 @mapper.maps(uri('pokemon-by-name'), uri('pokemon-by-id'))
 def pokemon_mapper(self, exchange):
     req_params = exchange.params
