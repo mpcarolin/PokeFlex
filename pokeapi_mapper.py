@@ -32,11 +32,17 @@ def encounter_mapper(self, exchange):
     return return_json
 
 
-@mapper.maps(uri('pokemon-by-name'), uri('pokemon-by-id'))
+@mapper.maps(uri('pokemon-by-name'))
 def pokemon_mapper(self, exchange):
     req_params = exchange.params
     pid = _sql_format(req_params['pokemon'])
     sql_json = sql_util.get_pokemon(pid)
+    return _combine_dicts(exchange.json(), sql_json)
+
+@mapper.maps(uri('pokemon-by-id'))
+def pokemon_dexnum_mapper(self, exchange):
+    req_params = exchange.params
+    sql_json = sql_util.get_pokemon_by_dexnum(req_params['dexnum'])
     return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('move-by-name'))

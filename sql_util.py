@@ -66,6 +66,20 @@ class PokedexMySQLUtil(object):
                 result_json['model'] = url
         
         return result_json
+
+    def get_pokemon_by_dexnum(self, dexnum):
+        queries = [
+            "SELECT pid FROM Pokemon WHERE dex_num=%d" % dexnum
+        ]
+
+        #Get pid from the Pokemon table
+        self.cursor.execute(queries[0])
+        pid = self.cursor.fetchone()['pid']
+
+        #empty the rest of the cursor
+        self.cursor.fetchall()
+
+        return self.get_pokemon(pid)
     
     #TODO: Include move flags
     def get_move(self, mid):
