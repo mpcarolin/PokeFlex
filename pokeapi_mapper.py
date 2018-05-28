@@ -35,7 +35,7 @@ def encounter_mapper(self, exchange):
 @mapper.maps(uri('pokemon-by-name'))
 def pokemon_mapper(self, exchange):
     req_params = exchange.params
-    pid = _sql_format(req_params['pokemon'])
+    pid = req_params['pokemon']
     sql_json = sql_util.get_pokemon(pid)
     return _combine_dicts(exchange.json(), sql_json)
 
@@ -48,28 +48,28 @@ def pokemon_dexnum_mapper(self, exchange):
 @mapper.maps(uri('move-by-name'))
 def move_mapper(self, exchange):
     req_params = exchange.params
-    mid = _sql_format(req_params['move_name'])
+    mid = req_params['move_name']
     sql_json = sql_util.get_move(mid)
     return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('ability-by-name'))
 def ability_mapper(self, exchange):
     req_params = exchange.params
-    aid = _sql_format(req_params['abil_name'])
+    aid = req_params['abil_name']
     sql_json = sql_util.get_ability(aid)
     return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('item-by-name'))
 def item_mapper(self, exchange):
     req_params = exchange.params
-    iid = _sql_format(req_params['item_name'])
+    iid = req_params['item_name']
     sql_json = sql_util.get_item(iid)
     return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('set'))
 def set_mapper(self, exchange):
     req_params = exchange.params
-    pid = _sql_format(req_params['pokemon'])
+    pid = req_params['pokemon']
     return sql_util.get_set(pid,req_params['meta'], req_params['gen'])
 
 @mapper.maps(DEFAULT_ENDPOINTS)
@@ -79,14 +79,6 @@ def default_mapper(self, exchange):
     the MySQL database
     '''
     return exchange.json()
-
-def _sql_format(pokemon_name):
-    '''
-    A helper method to insure that the arguments
-    being passed to the PokedexMySQLUtil are
-    formatted correctly.
-    '''
-    return pokemon_name.replace('-','')
 
 def _combine_dicts(dict1, dict2):
         return {**dict1, **dict2}
