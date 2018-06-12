@@ -162,7 +162,7 @@ class PokedexMySQLUtil(object):
             set['ability'] = data['ability']
             set['item'] = data['item']
             set['moves'] = [data['move_1'], data['move_2'], data['move_3'], data['move_4']]
-            set['title'] = data['level']
+            set['title'] = data['title']
             set['nature'] = data['nature']
             set['ivs'] = self._create_stat_dict_from_set('iv',data)
             set['evs'] = self._create_stat_dict_from_set('ev',data)
