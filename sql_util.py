@@ -141,47 +141,6 @@ class PokedexMySQLUtil(object):
         result_json['ng_power'] = sql_json['power']
         result_json['debut'] = sql_json['debut']
         return result_json
-    
-    def get_set(self, pokemon, meta, gen):
-        result_json = {}
-        pid = self._to_sql_id(pokemon)
-        queries = [
-            ("SELECT * FROM Trick WHERE pid = '%s'"
-                    " AND tier_id = '%s'"
-                    " AND gen = %d" % (pid, meta, gen)),
-            "SELECT specie FROM Pokemon WHERE pid='%s'" % pid
-        ]
-        
-        #compile sets
-        self.cursor.execute(queries[0])
-        sets = []
-        data = None
-        for data in self.cursor:
-            set = {}
-            set['level'] = data['level']
-            set['ability'] = data['ability']
-            set['item'] = data['item']
-            set['moves'] = [data['move_1'], data['move_2'], data['move_3'], data['move_4']]
-            set['title'] = data['title']
-            set['nature'] = data['nature']
-            set['ivs'] = self._create_stat_dict_from_set('iv',data)
-            set['evs'] = self._create_stat_dict_from_set('ev',data)
-            sets.append(set)
-        result_json['sets'] = sets
-        
-        #get general info about sets
-        if data is not None:
-            result_json['gen'] = data['gen']
-            result_json['url'] = data['url']
-            result_json['tier'] = data['tier']
-        
-        #Get the Pokemon's proper name
-        self.cursor.execute(queries[1])
-        sql_json = self.cursor.next()
-        result_json['name'] = sql_json['specie']
-        
-        return result_json
-    
 
     def _create_stat_dict_from_set(self, type, data):
         stats = ['hp','atk','def','spatk','spdef','spd']

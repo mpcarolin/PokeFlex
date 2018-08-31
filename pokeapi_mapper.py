@@ -9,9 +9,11 @@ API = APIS["pokeapi"]
 BASE_URI = API["base_uri"]
 ENDPOINTS = API["endpoints"]
 
-def uri(key): return BASE_URI + ENDPOINTS[key]
+def uri(key):
+    print (BASE_URI + ENDPOINTS[key])
+    return BASE_URI + ENDPOINTS[key]
 
-DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'), uri('location'), 
+POKEAPI_DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'), uri('location'), 
                 uri('location-area'), uri('encounter-method'), uri('encounter-condition'), 
                 uri('encounter-condition-value'), uri('pokemon-habitat'), uri('pokemon-form'),
                 uri('pokemon-color'), uri('pokemon-shape'), uri('evolution-chain'), uri('evolution-trigger'),
@@ -66,18 +68,18 @@ def item_mapper(self, exchange):
     sql_json = sql_util.get_item(iid)
     return _combine_dicts(exchange.json(), sql_json)
 
-@mapper.maps(uri('set'))
-def set_mapper(self, exchange):
-    req_params = exchange.params
-    pid = req_params['pokemon']
-    return sql_util.get_set(pid,req_params['meta'], req_params['gen'])
-
-@mapper.maps(DEFAULT_ENDPOINTS)
-def default_mapper(self, exchange):
+@mapper.maps(POKEAPI_DEFAULT_ENDPOINTS)
+def default_pokeapi_mapper(self, exchange):
     '''
     A method for all endpoints that don't need data from
     the MySQL database
     '''
+    return exchange.json()
+
+print (APIS["smogon_dex"]["base_uri"] + APIS["smogon_dex"]["endpoints"]["set"])  
+
+@mapper.maps(APIS["smogon_dex"]["base_uri"] + APIS["smogon_dex"]["endpoints"]["set"])
+def default_smogon_mapper(self, exchange):
     return exchange.json()
 
 def _combine_dicts(dict1, dict2):
