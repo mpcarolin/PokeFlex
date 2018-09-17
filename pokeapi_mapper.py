@@ -21,7 +21,8 @@ POKEAPI_DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-
                 uri('move-target'), uri('move-category'), uri('move-battle-style'), uri('move-damage-class'),
                 uri('contest-effect'), uri('contest-type'), uri('item-category'), uri('item-fling-effect'),
                 uri('item-pocket'), uri('machine'), uri('berry'), uri('berry-firmness'), uri('berry-flavor'),
-                uri('type'), uri('region'), uri('super-contest-effect'), uri('nature'))
+                uri('type'), uri('region'), uri('super-contest-effect'), uri('nature'), uri('ability-by-number'),
+                uri('pokemon-by-id'))
 
 @mapper.maps(uri('encounter'))
 def encounter_mapper(self, exchange):
@@ -39,12 +40,6 @@ def pokemon_mapper(self, exchange):
     req_params = exchange.params
     pid = req_params['pokemon']
     sql_json = sql_util.get_pokemon(pid)
-    return _combine_dicts(exchange.json(), sql_json)
-
-@mapper.maps(uri('pokemon-by-id'))
-def pokemon_dexnum_mapper(self, exchange):
-    req_params = exchange.params
-    sql_json = sql_util.get_pokemon_by_dexnum(req_params['dexnum'])
     return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('move-by-name'))
