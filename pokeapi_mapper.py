@@ -14,7 +14,7 @@ def uri(key):
     return BASE_URI + ENDPOINTS[key]
 
 POKEAPI_DEFAULT_ENDPOINTS = (uri('pokemon-species-by-id'), uri('pokemon-species-by-name'), uri('location'), 
-                uri('location-area'), uri('encounter-method'), uri('encounter-condition'), 
+                uri('location-area'), uri('encounter-method'), uri('encounter-condition'), uri('version'), 
                 uri('encounter-condition-value'), uri('pokemon-habitat'), uri('pokemon-form'),
                 uri('pokemon-color'), uri('pokemon-shape'), uri('evolution-chain'), uri('evolution-trigger'),
                 uri('growth-rate'), uri('egg-group'), uri('stat'), uri('move-learn-method'),
