@@ -54,13 +54,13 @@ class PokedexMySQLUtil(object):
     def get_pokemon(self, id):
         result_json = {}
         queries = [
-            "SELECT pid FROM Pokemon WHERE flex_form='%s'" % id
+            "SELECT en FROM Pokemon WHERE flex_form='%s'" % id
         ]
         
-        #Get the pid from the Pokemon table
+        #Get the en from the Pokemon table
         self.cursor.execute(queries[0])
-        pid = self.cursor.fetchone()['pid']
-        queries.append("SELECT url FROM Model WHERE pid='%s'" % pid)
+        en = self.cursor.fetchone()['en']
+        queries.append("SELECT url FROM Model WHERE en='%s'" % en)
 
         #Get data from the Model table
         self.cursor.execute(queries[1])
@@ -88,17 +88,16 @@ class PokedexMySQLUtil(object):
     
     def get_move(self, id):
         result_json = {}
-        mid = self._to_sql_id(id)
+        en = self._to_sql_id(id)
         queries = [
-            "SELECT * FROM Move WHERE mid='%s-m'" % mid,
-            "SELECT flag FROM MoveFlags WHERE mid='%s-m'" % mid,
+            "SELECT * FROM Move WHERE en='%s'" % en,
+            "SELECT flag FROM MoveFlags WHERE en='%s'" % en,
         ]
 
         self.cursor.execute(queries[0])
         sql_json = self.cursor.next()
         
         #Standard fields
-        result_json['max_pp'] = sql_json['max_pp']
         result_json['ldesc'] = sql_json['ldesc']
         result_json['sdesc'] = sql_json['sdesc']
         
@@ -106,7 +105,6 @@ class PokedexMySQLUtil(object):
         result_json['z_power'] = sql_json['z_power']
         result_json['z_effect'] = self._get_z_effect_desc(sql_json['z_effect'])
         result_json['z_boost'] = sql_json['z_boost']
-        result_json['crystal'] = sql_json['crystal']
         
         self.cursor.execute(queries[1])
         flags = []
@@ -120,8 +118,8 @@ class PokedexMySQLUtil(object):
     
     def get_ability(self, id):
         result_json = {}
-        aid = self._to_sql_id(id)
-        query = "SELECT * FROM Ability WHERE aid='%s-a'" % aid
+        en = self._to_sql_id(id)
+        query = "SELECT * FROM Ability WHERE en='%s'" % en
         self.cursor.execute(query)
         sql_json = self.cursor.next()
         result_json['rating'] = sql_json['rating']
@@ -131,8 +129,8 @@ class PokedexMySQLUtil(object):
     
     def get_item(self, id):
         result_json = {}
-        iid = self._to_sql_id(id)
-        query = "SELECT * FROM Item WHERE iid='%s-i'" % iid
+        en = self._to_sql_id(id)
+        query = "SELECT * FROM Item WHERE en='%s'" % en
         self.cursor.execute(query)
         sql_json = self.cursor.next()
         result_json['ldesc'] = sql_json['ldesc']
