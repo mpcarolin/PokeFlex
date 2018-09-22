@@ -42,7 +42,7 @@ def pokemon_mapper(self, exchange):
     return _combine_dicts(exchange.json(), sql_json)
 
 @mapper.maps(uri('pokemon-by-id'))
-def pokemon_mapper(self, exchange):
+def pokemon_num_mapper(self, exchange):
     req_params = exchange.params
     pid = exchange.json()['name']
     sql_json = sql_util.get_pokemon_by_dexnum(pid)

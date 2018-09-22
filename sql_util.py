@@ -59,7 +59,11 @@ class PokedexMySQLUtil(object):
         
         #Get the en from the Pokemon table
         self.cursor.execute(queries[0])
-        en = self.cursor.fetchone()['en']
+        fetched = self.cursor.fetchone()
+        if fetched is None:
+            return {}
+            
+        en = fetched['en']
         queries.append("SELECT url FROM Model WHERE en='%s'" % en)
 
         #Get data from the Model table
