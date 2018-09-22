@@ -72,18 +72,7 @@ class PokedexMySQLUtil(object):
         
         return result_json
 
-    def get_pokemon_by_dexnum(self, dexnum):
-        queries = [
-            "SELECT flex_form FROM Pokemon WHERE dex_num=%d" % dexnum
-        ]
-
-        #Get pid from the Pokemon table
-        self.cursor.execute(queries[0])
-        flex_form = self.cursor.fetchone()['flex_form']
-
-        #empty the rest of the cursor
-        self.cursor.fetchall()
-
+    def get_pokemon_by_dexnum(self, flex_form):
         return self.get_pokemon(flex_form)
     
     def get_move(self, id):
