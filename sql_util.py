@@ -85,6 +85,7 @@ class PokedexMySQLUtil(object):
         queries = [
             "SELECT * FROM Move WHERE en='%s'" % en,
             "SELECT flag FROM MoveFlags WHERE en='%s'" % en,
+            "SELECT * FROM MoveImages WHERE flex_form='%s'" % id
         ]
 
         self.cursor.execute(queries[0])
@@ -99,6 +100,7 @@ class PokedexMySQLUtil(object):
         result_json['z_effect'] = self._get_z_effect_desc(sql_json['z_effect'])
         result_json['z_boost'] = sql_json['z_boost']
         
+        #flags
         self.cursor.execute(queries[1])
         flags = []
         for result in self.cursor:
@@ -106,6 +108,17 @@ class PokedexMySQLUtil(object):
             flags.append(flag_desc[flag])
         
         result_json['flags'] = flags
+
+        #images
+        self.cursor.execute(queries[2])
+        images = []
+        for result in self.cursor:
+            image = {}
+            image['url'] = result['url']
+            image['language'] = result['lang']
+            image['generation'] = result['gen']
+            images.append(image)
+        result_json['images'] = images
         
         return result_json
     
