@@ -1,5 +1,6 @@
 from flask_api import FlaskAPI
 from flask import request
+from flask
 from functools import partial, reduce
 from mapping import ResponseMapper
 from constants import PROJECT_NAME, APIS
@@ -19,6 +20,9 @@ cache.install_cache(
     backend = CACHE_DB,
     expire_after = SYNC_INTERVAL
 )
+
+def SET_CORS(allowed_uris):
+
 
 class FlexApp(FlaskAPI):
     '''
@@ -97,6 +101,7 @@ def set_passthroughs(app, mapper):
         full_uri = make_uri(endpoint, params)
         api_request_handler = request_handlers[request.method]
         response = api_request_handler(full_uri, request)
+        response.headers.add('Access-Control-Allow-Origin', '*')
         exchange = HTTPExchange(response, params=params)
 
         return mapper.map(endpoint, exchange)

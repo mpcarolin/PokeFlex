@@ -24,29 +24,19 @@
 	"buffers":
 	[
 		{
-			"file": "api.py",
-			"settings":
-			{
-				"buffer_size": 4349,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "main.py",
 			"settings":
 			{
-				"buffer_size": 122,
+				"buffer_size": 132,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "test.py",
+			"file": "config.ini",
 			"settings":
 			{
-				"buffer_size": 2677,
-				"encoding": "UTF-8",
+				"buffer_size": 415,
 				"line_ending": "Unix"
 			}
 		},
@@ -60,11 +50,19 @@
 			}
 		},
 		{
-			"file": "sample.py",
+			"file": "api.py",
 			"settings":
 			{
-				"buffer_size": 517,
+				"buffer_size": 4453,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pokeapi_mapper.py",
+			"settings":
+			{
+				"buffer_size": 3242,
 				"line_ending": "Unix"
 			}
 		},
@@ -72,8 +70,19 @@
 			"file": "constants.py",
 			"settings":
 			{
-				"buffer_size": 459,
+				"buffer_size": 458,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "{\n    \"pokeapi\": {\n        \"base_uri\": \"http://pokeapi.co/api/v2\",\n        \"endpoints\": {\n            \"pokemon-by-id\": \"/pokemon/<int:param>\",\n            \"pokemon-by-name\": \"/pokemon/<string:param>\",\n            \"pokemon-species-by-id\": \"/pokemon-species/<int:param>\",\n            \"pokemon-species-by-name\": \"/pokemon-species/<string:param>\",\n\n            \"pokemon-habitat\": \"/pokemon-habitat/<string:param>\",\n            \"pokemon-form\": \"/pokemon-form/<int:param>\",\n            \"pokemon-color\": \"/pokemon-color/<string:param>\",\n            \"pokemon-shape\": \"/pokemon-shape/<string:param>\",\n            \"evolution-chain\": \"/evolution-chain/<string:param>\",\n            \"evolution-trigger\": \"/evolution-trigger/<string:param>\",\n            \"growth-rate\": \"/growth-rate/<string:param>\",\n            \"egg-group\": \"/egg-group/<string:param>\",\n            \"stat\": \"/stat/<string:param>\",\n            \"type\": \"/type/<string:param>\",\n\n            \"move-by-name\": \"/move/<string:param>\",\n            \"move-learn-method\": \"/move-learn-method/<string:param>\",\n            \"move-target\": \"/move-target/<string:param>\",\n            \"move-category\": \"/move-category/<string:param>\",\n            \"move-battle-style\": \"/move-battle-style/<string:param>\",\n            \"move-damage-class\": \"/move-damage-class/<string:param>\",\n            \"contest-effect\": \"/contest-effect/<string:param>\",\n            \"contest-type\": \"/contest-type/<string:param>\",\n            \"super-contest-effect\": \"/super-contest-effect/<string:param>\",\n\n            \"ability-by-name\": \"/ability/<string:param>\",\n\n            \"item-by-name\": \"/item/<string:param>\",\n            \"item-attribute\": \"/item-attribute/<string:param>\",\n            \"item-category\": \"/item-category/<string:param>\",\n            \"item-fling-effect\": \"/item-fling-effect/<string:param>\",\n            \"item-pocket\": \"/item-pocket/<string:param>\",\n            \"machine\": \"/machine/<string:param>\",\n            \"berry\": \"/berry/<string:param>\",\n            \"berry-firmness\": \"/berry-firmness/<string:param>\",\n            \"berry-flavor\": \"/berry-flavor/<string:param>\",\n\n            \"set\": \"/set/<string:pokemon>/<string:meta>/<int:gen>\",\n            \"set2\": \"/set/<string:param>\",\n\n            \"location\": \"/location/<string:param>\",\n            \"location-area\": \"/location-area/<string:param>\",\n            \"encounter-method\": \"/encounter-method/<string:param>\",\n            \"encounter-condition\": \"/encounter-condition/<string:param>\",\n            \"encounter-condition-value\": \"/encounter-condition-value/<string:param>\",\n\n            \"pokedex\": \"/pokedex/<string:param>\",\n            \"region\": \"/region/<string:param>\",\n            \"nature\": \"/nature/<string:param>\"\n        }\n    }\n}\n",
+			"file": "endpoints.json",
+			"file_size": 2716,
+			"file_write_time": 131677068697240659,
+			"settings":
+			{
+				"buffer_size": 2716,
 				"line_ending": "Unix"
 			}
 		}
@@ -171,15 +180,17 @@
 	],
 	"file_history":
 	[
-		"/Users/mpcarolin/Python/pokeflex/main.py",
+		"/Users/mpcarolin/Python/pokeflex/pokeapi_mapper.py",
 		"/Users/mpcarolin/Python/pokeflex/endpoints.json",
-		"/Users/mpcarolin/Python/pokeflex/test.py",
-		"/Users/mpcarolin/Python/pokeflex/sql_util.py",
-		"/Users/mpcarolin/Python/pokeflex/config.ini",
+		"/Users/mpcarolin/Python/pokeflex/api.py",
+		"/Users/mpcarolin/Python/pokeflex/sample_mapper.py",
 		"/Users/mpcarolin/Python/pokeflex/sample.py",
+		"/Users/mpcarolin/Python/pokeflex/sql_util.py",
+		"/Users/mpcarolin/Python/pokeflex/test.py",
+		"/Users/mpcarolin/Python/pokeflex/main.py",
+		"/Users/mpcarolin/Python/pokeflex/config.ini",
 		"/Users/mpcarolin/Python/pokeflex/constants.py",
 		"/Users/mpcarolin/Python/pokeflex/mapping.py",
-		"/Users/mpcarolin/Python/pokeflex/api.py",
 		"/Users/mpcarolin/Python/pokeflex/.gitignore",
 		"/Users/mpcarolin/Downloads/endpoints.json"
 	],
@@ -223,28 +234,25 @@
 			[
 				{
 					"buffer": 0,
-					"file": "api.py",
+					"file": "main.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4349,
+						"buffer_size": 132,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								451,
-								451
+								81,
+								81
 							]
 						],
 						"settings":
 						{
 							"highlight_line": false,
-							"history_list_is_closing": true,
 							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
 							"vintage":
 							{
 								"_vintageous_glue_until_normal_mode": false,
@@ -256,14 +264,13 @@
 								"must_capture_register_name": false,
 								"normal_insert_count": "1",
 								"partial_sequence": "",
-								"recording": false,
 								"register": "\"",
 								"sequence": "",
 								"xpos": 0
 							}
 						},
 						"translation.x": 0.0,
-						"translation.y": 342.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -271,157 +278,24 @@
 				},
 				{
 					"buffer": 1,
-					"file": "main.py",
+					"file": "config.ini",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 122,
+						"buffer_size": 415,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								122,
-								122
+								415,
+								415
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"vintage":
-							{
-								"_vintageous_glue_until_normal_mode": false,
-								"action": null,
-								"action_count": "",
-								"mode": "mode_normal",
-								"motion": null,
-								"motion_count": "",
-								"must_capture_register_name": false,
-								"normal_insert_count": "1",
-								"partial_sequence": "",
-								"register": "\"",
-								"sequence": "",
-								"xpos": 0
-							}
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "test.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2677,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								25,
-								25
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"vintage":
-							{
-								"action": null,
-								"action_count": "",
-								"mode": "mode_normal",
-								"motion": null,
-								"motion_count": "",
-								"must_capture_register_name": false,
-								"partial_sequence": "",
-								"register": "\"",
-								"sequence": "",
-								"xpos": 25
-							}
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "mapping.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1330,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								508,
-								508
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
-							"vintage":
-							{
-								"_vintageous_glue_until_normal_mode": false,
-								"action": null,
-								"action_count": "",
-								"mode": "mode_normal",
-								"motion": null,
-								"motion_count": "",
-								"must_capture_register_name": false,
-								"normal_insert_count": "1",
-								"partial_sequence": "",
-								"register": "\"",
-								"sequence": "",
-								"xpos": 37
-							}
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "sample.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 517,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								517,
-								517
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
 							"vintage":
 							{
 								"_vintageous_glue_until_normal_mode": false,
@@ -446,20 +320,153 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "constants.py",
+					"buffer": 2,
+					"file": "mapping.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 459,
+						"buffer_size": 1330,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								459,
-								459
+								655,
+								655
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"vintage":
+							{
+								"_vintageous_glue_until_normal_mode": false,
+								"action": null,
+								"action_count": "",
+								"mode": "mode_normal",
+								"motion": null,
+								"motion_count": "",
+								"must_capture_register_name": false,
+								"normal_insert_count": "1",
+								"partial_sequence": "",
+								"register": "\"",
+								"sequence": "",
+								"xpos": 42
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "api.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4453,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2151,
+								2151
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"vintage":
+							{
+								"_vintageous_glue_until_normal_mode": false,
+								"action": null,
+								"action_count": "",
+								"mode": "mode_normal",
+								"motion": null,
+								"motion_count": "",
+								"must_capture_register_name": false,
+								"normal_insert_count": "1",
+								"partial_sequence": "",
+								"register": "\"",
+								"sequence": "",
+								"xpos": 61
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 1042.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "pokeapi_mapper.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3242,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								287,
+								287
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"vintage":
+							{
+								"action": null,
+								"action_count": "",
+								"mode": "mode_normal",
+								"motion": null,
+								"motion_count": "",
+								"must_capture_register_name": false,
+								"partial_sequence": "",
+								"register": "\"",
+								"sequence": "",
+								"xpos": 0
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 253.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "constants.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 458,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								40,
+								40
 							]
 						],
 						"settings":
@@ -476,14 +483,57 @@
 								"partial_sequence": "",
 								"register": "\"",
 								"sequence": "",
-								"xpos": 0
+								"xpos": 40
 							}
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "endpoints.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2716,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								112,
+								112
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"vintage":
+							{
+								"action": null,
+								"action_count": "",
+								"mode": "mode_normal",
+								"motion": null,
+								"motion_count": "",
+								"must_capture_register_name": false,
+								"partial_sequence": "",
+								"register": "\"",
+								"sequence": "",
+								"xpos": 22
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -495,7 +545,7 @@
 	},
 	"input":
 	{
-		"height": 36.0
+		"height": 39.0
 	},
 	"layout":
 	{
@@ -542,12 +592,32 @@
 		"selected_items":
 		[
 			[
+				"con",
+				"constants.py"
+			],
+			[
+				"tes",
+				"test.py"
+			],
+			[
 				"main",
 				"main.py"
 			],
 			[
 				"test",
 				"test.py"
+			],
+			[
+				"confi",
+				"config.ini"
+			],
+			[
+				"const",
+				"constants.py"
+			],
+			[
+				"sql",
+				"sql_util.py"
 			],
 			[
 				"sampl",
@@ -564,14 +634,6 @@
 			[
 				"api",
 				"api.py"
-			],
-			[
-				"const",
-				"constants.py"
-			],
-			[
-				"sql",
-				"sql_util.py"
 			],
 			[
 				"constan",
@@ -600,7 +662,11 @@
 		[
 			[
 				"",
-				"~/Clojure/my-site.sublime-project"
+				"~/Javascript/pokedex.sublime-project"
+			],
+			[
+				"poked",
+				"~/Javascript/pokedex.sublime-project"
 			]
 		],
 		"width": 380.0
@@ -617,14 +683,14 @@
 	"selected_group": 0,
 	"settings":
 	{
-		"_vintageous_last_buffer_search": "dbreak",
+		"_vintageous_last_buffer_search": "APIS",
 		"_vintageous_last_buffer_search_command": "vi_star",
 		"_vintageous_last_char_search_command": "vi_f",
-		"_vintageous_last_character_search": "'",
+		"_vintageous_last_character_search": "0",
 		"_vintageous_reset_during_init": true,
 		"vintage":
 		{
-			"_cmdline_cd": "/Users/mpcarolin/Python/pokeflex"
+			"_cmdline_cd": "/Applications/Sublime Text.app/Contents/MacOS"
 		}
 	},
 	"show_minimap": false,

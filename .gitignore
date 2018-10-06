@@ -7,6 +7,9 @@ config.ini
 PokeFlex_cache.sqlite
 endpoints.json
 
+# mac filesystem nonsense
+.DS_STORE
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

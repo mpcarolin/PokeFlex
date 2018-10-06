@@ -14,7 +14,7 @@ PokeFlex will be available on localhost:5000
 # Full Story
 PokeFlex provides REST api endpoints to PokeAPI, running on an easy to
 boot python server. Why, you may ask, would one want this when there is, you know, 
-POKE API? Here's why we needed it:
+PokeAPI? Here's why we needed it:
 
 ## Caching
 PokeAPI has a fair use policy that limits the requests you can
