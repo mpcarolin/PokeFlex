@@ -20,9 +20,6 @@ cache.install_cache(
     expire_after = SYNC_INTERVAL
 )
 
-def SET_CORS(allowed_uris):
-
-
 class FlexApp(FlaskAPI):
     '''
     App for hosting an API. 
