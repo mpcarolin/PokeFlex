@@ -1,6 +1,5 @@
 from flask_api import FlaskAPI
 from flask import request
-from flask
 from functools import partial, reduce
 from mapping import ResponseMapper
 from constants import PROJECT_NAME, APIS
