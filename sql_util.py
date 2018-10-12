@@ -1,5 +1,6 @@
 import configparser
 import mysql.connector
+import mysql.connector.pooling
 
 flag_desc = {
     "authentic" : "Ignores a target's substitute.",
@@ -34,6 +35,7 @@ z_effect_desc = {
     "curse" : "If user is Ghost type, HP is restored. Otherwise, increases Attack by one more stage."
     }
 
+POOL_NAME = 'pokepool'
 
 class PokedexMySQLUtil(object):
     '''
@@ -45,11 +47,14 @@ class PokedexMySQLUtil(object):
         config = configparser.ConfigParser()
         config.read('config.ini')
         config = config['MySQL']
-        self.db_connection = mysql.connector.connect(user=config['user'],
+
+        self.cnx_pool = mysql.connector.pooling.MySQLConnectionPool(user=config['user'],
                                         password=config['password'],
                                         host=config['host'],
-                                        database=config['database'])
-        self.cursor = self.db_connection.cursor(dictionary=True, buffered=True)
+                                        database=config['database'],
+                                        pool_size=32,
+                                        pool_name=POOL_NAME,
+                                        pool_reset_session=True)
 
     def get_pokemon(self, id):
         result_json = {}
@@ -57,24 +62,34 @@ class PokedexMySQLUtil(object):
             "SELECT en FROM Pokemon WHERE flex_form='%s'" % id
         ]
         
-        #Get the en from the Pokemon table
-        self.cursor.execute(queries[0])
-        fetched = self.cursor.fetchone()
-        if fetched is None:
-            return {}
+        try:
+            connection = self.cnx_pool.get_connection()
+            cursor = connection.cursor(dictionary=True, buffered=True)
             
-        en = fetched['en']
-        queries.append("SELECT url FROM Model WHERE en='%s'" % en)
+            #Get the en from the Pokemon table
+            cursor.execute(queries[0])
+            fetched = cursor.fetchone()
+            if fetched is None:
+                return {}
+                
+            en = fetched['en']
+            queries.append("SELECT url FROM Model WHERE en='%s'" % en)
 
-        #Get data from the Model table
-        self.cursor.execute(queries[1])
-        for url in self.cursor:
-            if '-shiny' in str(url):
-                result_json['shiny_model'] = url
-            else:
-                result_json['model'] = url
-        
-        return result_json
+            #Get data from the Model table
+            cursor.execute(queries[1])
+            for url in cursor:
+                if '-shiny' in str(url):
+                    result_json['shiny_model'] = url
+                else:
+                    result_json['model'] = url
+            return result_json
+        except:
+            print('Error occured')
+            return {}
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
 
     def get_pokemon_by_dexnum(self, flex_form):
         return self.get_pokemon(flex_form)
@@ -88,63 +103,98 @@ class PokedexMySQLUtil(object):
             "SELECT * FROM MoveImages WHERE flex_form='%s'" % id
         ]
 
-        self.cursor.execute(queries[0])
-        sql_json = self.cursor.next()
-        
-        #Standard fields
-        result_json['ldesc'] = sql_json['ldesc']
-        result_json['sdesc'] = sql_json['sdesc']
-        
-        #Optional fields
-        result_json['z_power'] = sql_json['z_power']
-        result_json['z_effect'] = self._get_z_effect_desc(sql_json['z_effect'])
-        result_json['z_boost'] = sql_json['z_boost']
-        
-        #flags
-        self.cursor.execute(queries[1])
-        flags = []
-        for result in self.cursor:
-            flag = result['flag']
-            flags.append(flag_desc[flag])
-        
-        result_json['flags'] = flags
+        try:
+            connection = self.cnx_pool.get_connection()
+            cursor = connection.cursor(dictionary=True, buffered=True)
 
-        #images
-        self.cursor.execute(queries[2])
-        images = []
-        for result in self.cursor:
-            image = {}
-            image['url'] = result['url']
-            image['language'] = result['lang']
-            image['generation'] = result['gen']
-            images.append(image)
-        result_json['images'] = images
-        
-        return result_json
+            cursor.execute(queries[0])
+            sql_json = cursor.next()
+            
+            #Standard fields
+            result_json['ldesc'] = sql_json['ldesc']
+            result_json['sdesc'] = sql_json['sdesc']
+            
+            #Optional fields
+            result_json['z_power'] = sql_json['z_power']
+            result_json['z_effect'] = self._get_z_effect_desc(sql_json['z_effect'])
+            result_json['z_boost'] = sql_json['z_boost']
+            
+            #flags
+            cursor.execute(queries[1])
+            flags = []
+            for result in cursor:
+                flag = result['flag']
+                flags.append(flag_desc[flag])
+            
+            result_json['flags'] = flags
+
+            #images
+            cursor.execute(queries[2])
+            images = []
+            for result in cursor:
+                image = {}
+                image['url'] = result['url']
+                image['language'] = result['lang']
+                image['generation'] = result['gen']
+                images.append(image)
+            result_json['images'] = images
+            
+            return result_json
+        except:
+            print('Error occured')
+            return {}
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
     
     def get_ability(self, id):
         result_json = {}
         en = self._to_sql_id(id)
         query = "SELECT * FROM Ability WHERE en='%s'" % en
-        self.cursor.execute(query)
-        sql_json = self.cursor.next()
-        result_json['rating'] = sql_json['rating']
-        result_json['ldesc'] = sql_json['ldesc']
-        result_json['sdesc'] = sql_json['sdesc']
-        return result_json
+
+        try:
+            connection = self.cnx_pool.get_connection()
+            cursor = connection.cursor(dictionary=True, buffered=True)
+
+            cursor.execute(query)
+            sql_json = cursor.next()
+            result_json['rating'] = sql_json['rating']
+            result_json['ldesc'] = sql_json['ldesc']
+            result_json['sdesc'] = sql_json['sdesc']
+            return result_json
+        except:
+            print('Error occured')
+            return {}
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
     
     def get_item(self, id):
         result_json = {}
         en = self._to_sql_id(id)
         query = "SELECT * FROM Item WHERE en='%s'" % en
-        self.cursor.execute(query)
-        sql_json = self.cursor.next()
-        result_json['ldesc'] = sql_json['ldesc']
-        result_json['sdesc'] = sql_json['sdesc']
-        result_json['ng_type'] = sql_json['type']
-        result_json['ng_power'] = sql_json['power']
-        result_json['debut'] = sql_json['debut']
-        return result_json
+
+        try:
+            connection = self.cnx_pool.get_connection()
+            cursor = connection.cursor(dictionary=True, buffered=True)
+
+            cursor.execute(query)
+            sql_json = cursor.next()
+            result_json['ldesc'] = sql_json['ldesc']
+            result_json['sdesc'] = sql_json['sdesc']
+            result_json['ng_type'] = sql_json['type']
+            result_json['ng_power'] = sql_json['power']
+            result_json['debut'] = sql_json['debut']
+            return result_json
+        except:
+            print('Error occured')
+            return {}
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
 
     def _create_stat_dict_from_set(self, type, data):
         stats = ['hp','atk','def','spatk','spdef','spd']
