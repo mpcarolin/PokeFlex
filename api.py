@@ -127,7 +127,7 @@ def make_uri(uri, params):
     using the flask syntax <type:name>, such as <string:color>
     '''
     for name, value in params.items():
-        pattern = '<.*:name>'.replace('name', name)
+        pattern = '<[a-zA-Z]*:name>'.replace('name', name)
         uri = re.sub(pattern, str(value), uri, count=1)
 
     return uri
