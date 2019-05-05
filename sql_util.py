@@ -93,8 +93,8 @@ class PokedexMySQLUtil(object):
 
     def get_pokemon_by_dexnum(self, flex_form):
         return self.get_pokemon(flex_form)
-    
-    def get_move(self, id):
+
+    def get_regular_move(self, id):
         result_json = {}
         en = self._to_sql_id(id)
         queries = [
@@ -147,6 +147,63 @@ class PokedexMySQLUtil(object):
             if connection is not None and connection.is_connected():
                 cursor.close()
                 connection.close()
+
+    def get_zmove(self, id):
+        result_json = {}
+        en = self._to_sql_id(self._strip_zmove_tags(id))
+        query = "SELECT * FROM ZCrystal WHERE en='%s'" % en
+
+        try:
+            connection = self.cnx_pool.get_connection()
+            cursor = connection.cursor(dictionary=True, buffered=True)
+            cursor.execute(query)
+            sql_json = cursor.next()
+
+            images = []
+            image = {}
+            image['url'] = sql_json['url']
+            image['language'] = 'en'
+            image['generation'] = 8
+            images.append(image)
+            result_json['images'] = images
+            result_json['crystal'] = sql_json['flex_form']
+
+            return result_json
+        except:
+            print('Error occured')
+            return {}
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
+
+    def is_zmove(self, id):
+        #check if a tag is included in the name
+        if ('--physical' in id) or ('--special' in id):
+            return True
+
+        #if no tag is present, check the database
+        try:
+            connection = self.cnx_pool.get_connection()
+            cursor = connection.cursor(dictionary=True, buffered=True)
+            query = "SELECT flex_form FROM ZMove WHERE flex_form = '%s'" % id
+            cursor.execute(query)
+
+            for row in cursor:
+                return True
+            return False
+        except:
+            print('Unable to determine if Move is a ZMove')
+            return False
+        finally:
+            if connection is not None and connection.is_connected():
+                cursor.close()
+                connection.close()
+    
+    def get_move(self, id):
+        if self.is_zmove(id):
+            return self.get_zmove(id)
+        return self.get_regular_move(id)
     
     def get_ability(self, id):
         result_json = {}
@@ -206,8 +263,10 @@ class PokedexMySQLUtil(object):
     def _get_z_effect_desc(self, flag):
         if flag in z_effect_desc:
             return z_effect_desc[flag]
-
         return flag
+
+    def _strip_zmove_tags(self, move):
+        return move.replace('--physical', '').replace('--special', '')
 
     def _to_sql_id(self, id):
         return id.replace('-','')
