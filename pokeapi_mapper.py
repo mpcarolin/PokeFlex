@@ -77,6 +77,7 @@ def default_pokeapi_mapper(self, exchange):
     '''
     return exchange.json()
 
+### Smogon Dex API
 print (APIS["smogon_dex"]["base_uri"] + APIS["smogon_dex"]["endpoints"]["set"])  
 
 @mapper.maps(APIS["smogon_dex"]["base_uri"] + APIS["smogon_dex"]["endpoints"]["set"])
