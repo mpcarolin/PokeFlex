@@ -1,0 +1,6 @@
+setup.py
+PokeFlex.egg-info/PKG-INFO
+PokeFlex.egg-info/SOURCES.txt
+PokeFlex.egg-info/dependency_links.txt
+PokeFlex.egg-info/requires.txt
+PokeFlex.egg-info/top_level.txt
