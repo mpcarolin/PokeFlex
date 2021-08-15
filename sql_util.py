@@ -100,8 +100,7 @@ class PokedexMySQLUtil(object):
         queries = [
             "SELECT * FROM Move WHERE en='%s'" % en,
             "SELECT flag FROM MoveFlags WHERE en='%s'" % en,
-            "SELECT * FROM MoveImages WHERE flex_form='%s'" % id,
-            "SELECT pokemon FROM LearnableMoves WHERE flex_form='%s'" % id
+            "SELECT * FROM MoveImages WHERE flex_form='%s'" % id
         ]
 
         try:
@@ -139,13 +138,6 @@ class PokedexMySQLUtil(object):
                 image['generation'] = result['gen']
                 images.append(image)
             result_json['images'] = images
-            
-            #pokemon
-            cursor.execute(queries[3])
-            pokemon = []
-            for result in cursor:
-                pokemon.append(result['pokemon'])
-            result_json['pokemon'] = pokemon
 
             return result_json
         except:
